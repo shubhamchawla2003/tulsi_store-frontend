@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: '/api' });
+// Use Vite env var when available, otherwise fall back to deployed backend URL
+const baseURL = import.meta.env.VITE_API_URL || 'https://tulsi-store-backend.vercel.app/api';
+const API = axios.create({ baseURL });
 
 API.interceptors.request.use((config) => {
   const userInfo = localStorage.getItem('userInfo');
