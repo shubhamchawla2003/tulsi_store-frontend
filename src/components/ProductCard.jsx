@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaStar } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
+  const { user } = useAuth();
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
       <Link to={`/product/${product._id}`}>
@@ -23,7 +25,7 @@ const ProductCard = ({ product }) => {
         </div>
         <div className="flex items-center justify-between mt-3">
           <span className="text-xl font-bold text-tulsi-700">₹{product.price}</span>
-          <button onClick={() => addToCart(product)} disabled={product.stock === 0}
+          <button onClick={() => addToCart(product)} disabled={product.stock === 0 || !user}
             className="bg-tulsi-600 hover:bg-tulsi-700 text-white p-2 rounded-full transition disabled:opacity-50">
             <FaShoppingCart size={14} />
           </button>

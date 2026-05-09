@@ -4,22 +4,14 @@ import { FaLeaf, FaShippingFast, FaHeart, FaSeedling } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import Loader from '../components/Loader';
 import { fetchFeatured } from '../services/api';
-import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      setFeatured([]);
-      return;
-    }
-
     fetchFeatured().then((res) => setFeatured(res.data)).catch(() => {}).finally(() => setLoading(false));
-  }, [user]);
+  }, []);
 
   return (
     <div>
@@ -66,12 +58,7 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Featured Products</h2>
           <p className="text-gray-600 mt-2">Handpicked favorites from our collection</p>
         </div>
-        {!user ? (
-          <div className="bg-white border border-dashed border-tulsi-200 rounded-2xl p-8 text-center">
-            <p className="text-gray-700 font-medium">Login to browse products and add items to your cart.</p>
-            <Link to="/login" className="btn-primary mt-4 inline-block">Login to Shop</Link>
-          </div>
-        ) : loading ? <Loader /> : (
+        {loading ? <Loader /> : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featured.map((p) => <ProductCard key={p._id} product={p} />)}
           </div>

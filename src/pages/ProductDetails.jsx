@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaStar, FaArrowLeft, FaCheckCircle } from 'react-icons/fa';
 import Loader from '../components/Loader';
+import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { fetchProduct } from '../services/api';
 
@@ -9,6 +10,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ const ProductDetails = () => {
                 <span className="px-4 font-semibold">{qty}</span>
                 <button onClick={() => setQty(Math.min(product.stock, qty + 1))} className="px-4 py-2 hover:bg-gray-100">+</button>
               </div>
-              <button onClick={() => addToCart(product, qty)} className="btn-primary flex items-center gap-2">
+              <button onClick={() => addToCart(product, qty)} disabled={!user} className="btn-primary flex items-center gap-2 disabled:opacity-50">
                 <FaShoppingCart /> Add to Cart
               </button>
             </div>
